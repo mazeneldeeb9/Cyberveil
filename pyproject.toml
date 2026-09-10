@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cyberveil"
+version = "0.1.0"
+description = "A safe academic desktop demonstrator for local process telemetry"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+  "psutil>=6,<8",
+  "pydantic>=2.8,<3",
+  "PySide6>=6.8,<7",
+]
+
+[project.optional-dependencies]
+dev = [
+  "mypy>=1.11,<2",
+  "pytest>=8,<9",
+  "pytest-cov>=5,<8",
+  "pytest-qt>=4.4,<5",
+  "ruff>=0.8,<1",
+  "types-psutil>=6,<8",
+]
+
+[project.scripts]
+cyberveil = "cyberveil.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-q --disable-warnings"
+testpaths = ["tests"]
+qt_api = "pyside6"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+packages = ["cyberveil"]
+
+[tool.coverage.run]
+source = ["cyberveil"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
