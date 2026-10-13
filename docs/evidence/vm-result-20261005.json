@@ -1,0 +1,917 @@
+{
+  "isolation": {
+    "vendor": "QEMU",
+    "interfaces": [
+      "lo"
+    ],
+    "host_shares": false,
+    "routes": []
+  },
+  "sample_family_from_repository": "Linux.Wirenet",
+  "sample_sha256": "35ff79dd456fe3054a60fe0a16f38bf5fc3928e1e8439ca4d945573f8c48c0b8",
+  "archive_sha256": "e0de34fa6e920cedb6f8280700ba076a64a0995efc896bfe33bea7991ced3e86",
+  "repository_revision": "48515e492013bc5bb2769249ea539436bb3e733f",
+  "platform": "Linux-6.8.0-142-generic-x86_64-with-glibc2.39",
+  "sample_uid": 1001,
+  "execution_started": true,
+  "initial_process_exit_before_cleanup": 0,
+  "elapsed_seconds": 70.1,
+  "specimen_pids": [
+    900,
+    902
+  ],
+  "specimen_observations": [
+    {
+      "second": 20,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 21,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 21,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 22,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 22,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 23,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 23,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 24,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 24,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 25,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 25,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 26,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 26,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 27,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 27,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 28,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 28,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 29,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 29,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 30,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 30,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 31,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 31,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 32,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 32,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 33,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 33,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 34,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 34,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 35,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 35,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 36,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 36,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 37,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 37,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 38,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 38,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 39,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 39,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 40,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 40,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 41,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 41,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 42,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 42,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 43,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 43,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 44,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 44,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 45,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 45,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 46,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 46,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 47,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 47,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 48,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 48,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 49,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 49,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 50,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 50,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 51,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 51,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 52,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 52,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 53,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 53,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 54,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 54,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 55,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 55,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 56,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 56,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 57,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 57,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 58,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 58,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 59,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 59,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 60,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 60,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 61,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 61,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 62,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 62,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 63,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 63,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 64,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 64,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 65,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 65,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 66,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 66,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 67,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 67,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 68,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 68,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0.9,
+      "rss_bytes": 2719744
+    },
+    {
+      "second": 69,
+      "pid": 900,
+      "name": "wirenet-lab-spe",
+      "cpu": 0,
+      "rss_bytes": 0
+    },
+    {
+      "second": 69,
+      "pid": 902,
+      "name": "WIFIADAPT",
+      "cpu": 0,
+      "rss_bytes": 2719744
+    }
+  ],
+  "specimen_scores": [
+    {
+      "pid": 900,
+      "score": 0.00012105862329322352,
+      "at": "2026-10-05T16:46:06.250639+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 902,
+      "score": 0.00013264693061708214,
+      "at": "2026-10-05T16:46:07.246951+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 900,
+      "score": 0.00011613020540313158,
+      "at": "2026-10-05T16:46:09.224475+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 902,
+      "score": 0.00012731850210858612,
+      "at": "2026-10-05T16:46:10.180481+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 900,
+      "score": 0.00011134393738479676,
+      "at": "2026-10-05T16:46:12.235873+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 902,
+      "score": 0.00012370819024683807,
+      "at": "2026-10-05T16:46:12.238735+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 900,
+      "score": 0.00010689325081314672,
+      "at": "2026-10-05T16:46:15.154614+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 902,
+      "score": 0.00011876356399337018,
+      "at": "2026-10-05T16:46:15.157337+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 900,
+      "score": 0.00010382131029248555,
+      "at": "2026-10-05T16:46:17.240951+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 902,
+      "score": 0.00011535024040993809,
+      "at": "2026-10-05T16:46:17.243853+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 900,
+      "score": 0.0000996205486045905,
+      "at": "2026-10-05T16:46:20.196127+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 902,
+      "score": 0.0001106821449964822,
+      "at": "2026-10-05T16:46:20.199616+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 900,
+      "score": 0.00009548665748988514,
+      "at": "2026-10-05T16:46:23.228501+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 902,
+      "score": 0.00010609021340606625,
+      "at": "2026-10-05T16:46:23.231365+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 900,
+      "score": 0.00009157775039911156,
+      "at": "2026-10-05T16:46:26.219097+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 902,
+      "score": 0.0001017469970365464,
+      "at": "2026-10-05T16:46:26.222157+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 900,
+      "score": 0.00008903985038464477,
+      "at": "2026-10-05T16:46:28.229911+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 902,
+      "score": 0.00009892757391038006,
+      "at": "2026-10-05T16:46:28.232776+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 900,
+      "score": 0.00008547586202065877,
+      "at": "2026-10-05T16:46:31.152648+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 902,
+      "score": 0.00009496793976260297,
+      "at": "2026-10-05T16:46:31.155444+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 900,
+      "score": 0.0000830322282262376,
+      "at": "2026-10-05T16:46:33.227906+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 902,
+      "score": 0.0000922527246321054,
+      "at": "2026-10-05T16:46:33.230889+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 900,
+      "score": 0.00008074049766525458,
+      "at": "2026-10-05T16:46:35.230420+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 902,
+      "score": 0.00008970670749299512,
+      "at": "2026-10-05T16:46:35.233259+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 900,
+      "score": 0.00007742167413297297,
+      "at": "2026-10-05T16:46:38.233517+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 902,
+      "score": 0.00008601915170037183,
+      "at": "2026-10-05T16:46:38.236530+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 900,
+      "score": 0.00007528317614191768,
+      "at": "2026-10-05T16:46:40.237561+00:00",
+      "missing_fields": []
+    },
+    {
+      "pid": 902,
+      "score": 0.00008535959566969499,
+      "at": "2026-10-05T16:46:40.240526+00:00",
+      "missing_fields": []
+    }
+  ],
+  "report": {
+    "report_id": "ee47463e-c917-4186-b49a-d8460f02002e",
+    "generated_at": "2026-10-05T16:46:41.777594Z",
+    "scan": {
+      "session_id": "998acc4e-868c-4a0c-90aa-1370f8807890",
+      "source": "live",
+      "status": "completed",
+      "started_at": "2026-10-05T16:45:31.677056Z",
+      "ended_at": "2026-10-05T16:46:41.684240Z",
+      "operating_system": "Linux",
+      "sample_count": 7589,
+      "detection_count": 0,
+      "blocked_count": 0,
+      "model_version": "sklearn-logistic-regression-a92ef585",
+      "error": null
+    },
+    "detections": [],
+    "actions": [],
+    "forensic_findings": [],
+    "lab_only": true
+  },
+  "specimen_detections": [],
+  "actions_taken_by_cyberveil": 0,
+  "limitations": [
+    "One historical disk-backed sample, not a fileless-malware benchmark",
+    "No network or command server; no browser credentials or interactive desktop",
+    "Unprivileged sample and resource caps restrict behavior",
+    "Synthetic model was not retrained"
+  ]
+}

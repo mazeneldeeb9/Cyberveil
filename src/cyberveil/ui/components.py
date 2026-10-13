@@ -138,6 +138,9 @@ class AmbientWidget(QWidget):
 class RadarWidget(QWidget):
     def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
+        # The radar sits on the solid hero panel. Avoid repainting the full-window
+        # translucent ambient gradients on every animation frame.
+        self.setAttribute(Qt.WidgetAttribute.WA_OpaquePaintEvent)
         self.setMinimumSize(220, 220)
         self.setMaximumSize(300, 300)
         self._angle = 0
@@ -166,6 +169,7 @@ class RadarWidget(QWidget):
         bounds = QRectF((self.width() - side) / 2, (self.height() - side) / 2, side, side)
         center = bounds.center()
         p = QPainter(self)
+        p.fillRect(self.rect(), QColor(COLORS["surface"]))
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
         glow = QRadialGradient(center, side / 2)
         glow.setColorAt(0, QColor(34, 211, 197, 24))
@@ -211,6 +215,8 @@ class MetricBlock(QFrame):
         self.value_label = QLabel(value)
         self.value_label.setObjectName("metricValue")
         self.label_label = QLabel(label)
+        self.value_label.setWordWrap(True)
+        self.label_label.setWordWrap(True)
         self.label_label.setObjectName("metricLabel")
         layout.addWidget(self.value_label)
         layout.addWidget(self.label_label)

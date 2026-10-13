@@ -1,0 +1,7 @@
+include README.md PRODUCT.md CYBERVEIL_IMPLEMENTATION_PLAN.md PHASE2_COMPLETION.md PHASE3_COMPLETION.md
+include constraints-release.txt
+recursive-include docs *.md *.json
+recursive-include scripts *.py
+recursive-include packaging *.py *.spec
+recursive-include tests *.py
+recursive-include .github/workflows *.yml

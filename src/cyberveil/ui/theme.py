@@ -29,6 +29,9 @@ def stylesheet() -> str:
     }}
     QMainWindow, QWidget#root, QWidget#ambient {{ background: {c["background"]}; }}
     QScrollArea#settingsScroll,
+    QScrollArea#dashboardScroll,
+    QWidget#dashboardViewport,
+    QWidget#dashboardBody,
     QWidget#settingsViewport,
     QWidget#settingsBody {{
         background: transparent;

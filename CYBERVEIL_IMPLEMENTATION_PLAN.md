@@ -22,6 +22,8 @@ Build a cross-platform academic MVP in three two-week phases. The application us
 
 **Acceptance:** Replays produce deterministic detections and reports; a bundled harmless demo process can be terminated; protected-process and PID-reuse guards prevent unsafe actions.
 
+**Implementation status (2026-09-28):** Delivered locally on `phase2`. See [PHASE2_COMPLETION.md](PHASE2_COMPLETION.md) for acceptance evidence and validation limits, and [MODEL_CARD.md](docs/MODEL_CARD.md) for synthetic model evaluation.
+
 ## Phase 3 - Reports, local AI, packaging, and hardening
 
 - Complete summary/full reports, search/filter behavior, settings, notifications, bilingual PDF/JSON/CSV exports, and responsive desktop layouts.
@@ -29,6 +31,8 @@ Build a cross-platform academic MVP in three two-week phases. The application us
 - Measure model quality and runtime overhead, finish accessibility/visual QA, package on each target OS, and document limitations and demonstrations.
 
 **Acceptance:** Clean installs complete the English and Arabic demo flows on Windows, macOS, and Linux; optional integrations fail gracefully; tests and release checks pass.
+
+**Implementation status (2026-10-05):** Phase 3 features are implemented locally as version 0.3.0. macOS bundle smoke checks and bilingual exports passed. Full release acceptance is still open: the measured CPU target is not met, and native Windows/Linux GUI clean-install validation, real-memory-image verification, and a real installed Ollama model run remain unverified. See [PHASE3_COMPLETION.md](PHASE3_COMPLETION.md) for evidence and the separate user-requested VM experiment. No Git push has been made for this phase.
 
 ## Architecture
 

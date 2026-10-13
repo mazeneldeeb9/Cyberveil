@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import sqlite3
 import threading
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -11,15 +11,19 @@ from cyberveil.domain import (
     AppSettings,
     DetectionDisposition,
     DetectionResult,
+    ForensicFinding,
     LogRecord,
+    RemediationAction,
     RemediationResult,
+    RemediationStatus,
     ScanRecord,
     ScanSource,
     ScanStatus,
+    Severity,
     utc_now,
 )
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 
 class Database:
@@ -94,14 +98,24 @@ class Database:
                     key TEXT PRIMARY KEY,
                     value_json TEXT NOT NULL
                 );
+                CREATE TABLE IF NOT EXISTS forensic_findings (
+                    finding_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    session_id TEXT NOT NULL REFERENCES scans(session_id) ON DELETE CASCADE,
+                    finding_json TEXT NOT NULL
+                );
                 CREATE INDEX IF NOT EXISTS idx_detections_session ON detections(session_id);
                 CREATE INDEX IF NOT EXISTS idx_detections_observed ON detections(observed_at DESC);
                 CREATE INDEX IF NOT EXISTS idx_logs_occurred ON logs(occurred_at DESC);
                 """
             )
             row = self._connection.execute("SELECT version FROM schema_meta LIMIT 1").fetchone()
+            columns = {item[1] for item in self._connection.execute("PRAGMA table_info(detections)")}
+            if "evidence_json" not in columns:
+                self._connection.execute("ALTER TABLE detections ADD COLUMN evidence_json TEXT NOT NULL DEFAULT '{}'")
             if row is None:
                 self._connection.execute("INSERT INTO schema_meta(version) VALUES (?)", (SCHEMA_VERSION,))
+            elif int(row["version"]) == 1:
+                self._connection.execute("UPDATE schema_meta SET version = ?", (SCHEMA_VERSION,))
             elif int(row["version"]) != SCHEMA_VERSION:
                 raise RuntimeError(f"Unsupported database schema version: {row['version']}")
 
@@ -171,8 +185,8 @@ class Database:
                 INSERT OR REPLACE INTO detections(
                     detection_id, session_id, observed_at, pid, process_started_at,
                     process_name, model_version, score, severity, label, threshold,
-                    reasons_json, disposition, source
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    reasons_json, disposition, source, evidence_json
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     result.detection_id,
@@ -189,6 +203,7 @@ class Database:
                     json.dumps(result.reasons, ensure_ascii=False),
                     result.disposition.value,
                     result.source.value,
+                    json.dumps({"values": result.feature_values, "missing": result.missing_fields}),
                 ),
             )
 
@@ -233,13 +248,30 @@ class Database:
                 ),
             )
 
-    def list_scans(self, limit: int = 100, search: str = "") -> list[ScanRecord]:
+    def list_scans(
+        self,
+        limit: int = 100,
+        search: str = "",
+        *,
+        source: ScanSource | None = None,
+        status: ScanStatus | None = None,
+    ) -> list[ScanRecord]:
         query = "SELECT * FROM scans"
         params: list[Any] = []
+        conditions = []
         if search:
-            query += " WHERE source LIKE ? OR status LIKE ? OR started_at LIKE ?"
-            term = f"%{search}%"
-            params.extend((term, term, term))
+            conditions.append(
+                "(source LIKE ? ESCAPE '\\' OR status LIKE ? ESCAPE '\\' "
+                "OR started_at LIKE ? ESCAPE '\\' OR session_id LIKE ? ESCAPE '\\')"
+            )
+            term = self._search_term(search)
+            params.extend((term, term, term, term))
+        for column, value in (("source", source), ("status", status)):
+            if value is not None:
+                conditions.append(f"{column} = ?")
+                params.append(value.value)
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
         query += " ORDER BY started_at DESC LIMIT ?"
         params.append(limit)
         with self._lock:
@@ -251,14 +283,32 @@ class Database:
             row = self._connection.execute("SELECT * FROM scans WHERE session_id = ?", (session_id,)).fetchone()
         return self._scan_from_row(row) if row else None
 
-    def list_detections(self, session_id: str | None = None, limit: int = 200) -> list[DetectionResult]:
+    def list_detections(
+        self,
+        session_id: str | None = None,
+        limit: int | None = 200,
+        *,
+        search: str = "",
+        severity: Severity | None = None,
+        disposition: DetectionDisposition | None = None,
+    ) -> list[DetectionResult]:
         query = "SELECT * FROM detections"
         params: list[Any] = []
+        conditions = []
         if session_id:
-            query += " WHERE session_id = ?"
+            conditions.append("session_id = ?")
             params.append(session_id)
+        if search:
+            conditions.append("(process_name LIKE ? ESCAPE '\\' OR detection_id LIKE ? ESCAPE '\\')")
+            params.extend((self._search_term(search), self._search_term(search)))
+        for column, value in (("severity", severity), ("disposition", disposition)):
+            if value is not None:
+                conditions.append(f"{column} = ?")
+                params.append(value.value)
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
         query += " ORDER BY observed_at DESC LIMIT ?"
-        params.append(limit)
+        params.append(-1 if limit is None else limit)
         with self._lock:
             rows = self._connection.execute(query, params).fetchall()
         return [self._detection_from_row(row) for row in rows]
@@ -271,6 +321,8 @@ class Database:
         return self._detection_from_row(row) if row else None
 
     def list_actions(self, detection_ids: list[str] | None = None) -> list[RemediationResult]:
+        if detection_ids == []:
+            return []
         query = "SELECT * FROM remediation_actions"
         params: list[Any] = []
         if detection_ids:
@@ -292,12 +344,119 @@ class Database:
             for row in rows
         ]
 
+    def list_actions_for_session(self, session_id: str) -> list[RemediationResult]:
+        # A join avoids SQLite's bound-variable limit on large incident histories.
+        with self._lock:
+            rows = self._connection.execute(
+                "SELECT a.* FROM remediation_actions a JOIN detections d USING(detection_id) "
+                "WHERE d.session_id = ? ORDER BY a.occurred_at DESC",
+                (session_id,),
+            ).fetchall()
+        return [RemediationResult(**dict(row)) for row in rows]
+
+    @staticmethod
+    def _search_term(value: str) -> str:
+        return "%" + value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
+
+    def purge_history(self, retention_days: int) -> tuple[int, int]:
+        """Only call after explicit UI/CLI confirmation; active sessions are preserved."""
+        if not 1 <= retention_days <= 365:
+            raise ValueError("Retention must be between 1 and 365 days")
+        cutoff = (utc_now() - timedelta(days=retention_days)).isoformat()
+        with self._lock, self._connection:
+            scans = self._connection.execute(
+                "DELETE FROM scans WHERE status != 'running' AND COALESCE(ended_at, started_at) < ?",
+                (cutoff,),
+            ).rowcount
+            logs = self._connection.execute(
+                "DELETE FROM logs WHERE occurred_at < ? AND COALESCE(json_extract(context_json, '$.session_id'), '') "
+                "NOT IN (SELECT session_id FROM scans WHERE status = 'running')",
+                (cutoff,),
+            ).rowcount
+        self.log(
+            LogRecord(
+                event="history.retention",
+                message="Confirmed history retention applied",
+                context={"scans_removed": scans, "logs_removed": logs, "days": retention_days},
+            )
+        )
+        return scans, logs
+
+    def record_remediation(self, result: RemediationResult) -> None:
+        """Commit action, disposition, counter, and audit event together; retries are idempotent."""
+        with self._lock, self._connection:
+            if self._connection.execute(
+                "SELECT 1 FROM remediation_actions WHERE action_id = ?",
+                (result.action_id,),
+            ).fetchone():
+                return
+            row = self._connection.execute(
+                "SELECT session_id, disposition FROM detections WHERE detection_id = ?",
+                (result.detection_id,),
+            ).fetchone()
+            if row is None:
+                raise ValueError("Cannot record action for an unknown detection")
+            succeeded = result.status == RemediationStatus.SUCCEEDED
+            disposition = (
+                DetectionDisposition.IGNORED
+                if result.action == RemediationAction.IGNORE
+                else DetectionDisposition.BLOCKED
+                if succeeded
+                else DetectionDisposition.BLOCK_FAILED
+            )
+            self._connection.execute(
+                "INSERT INTO remediation_actions VALUES (?, ?, ?, ?, ?, ?)",
+                (
+                    result.action_id,
+                    result.detection_id,
+                    result.occurred_at.isoformat(),
+                    result.action.value,
+                    result.status.value,
+                    result.message,
+                ),
+            )
+            if row["disposition"] != DetectionDisposition.BLOCKED.value:
+                self._connection.execute(
+                    "UPDATE detections SET disposition = ? WHERE detection_id = ?",
+                    (disposition.value, result.detection_id),
+                )
+                if disposition == DetectionDisposition.BLOCKED:
+                    self._connection.execute(
+                        "UPDATE scans SET blocked_count = blocked_count + 1 WHERE session_id = ?",
+                        (row["session_id"],),
+                    )
+            self._connection.execute(
+                "INSERT INTO logs(occurred_at, level, event, message, context_json) VALUES (?, ?, ?, ?, ?)",
+                (
+                    result.occurred_at.isoformat(),
+                    "INFO" if succeeded else "ERROR",
+                    "remediation.finished",
+                    result.message,
+                    json.dumps({"detection_id": result.detection_id, "status": result.status.value}),
+                ),
+            )
+
+    def save_forensic_findings(self, session_id: str, findings: tuple[ForensicFinding, ...]) -> None:
+        with self._lock, self._connection:
+            self._connection.executemany(
+                "INSERT INTO forensic_findings(session_id, finding_json) VALUES (?, ?)",
+                [(session_id, finding.model_dump_json()) for finding in findings],
+            )
+
+    def list_forensic_findings(self, session_id: str) -> tuple[ForensicFinding, ...]:
+        with self._lock:
+            rows = self._connection.execute(
+                "SELECT finding_json FROM forensic_findings WHERE session_id = ? ORDER BY finding_id",
+                (session_id,),
+            ).fetchall()
+        return tuple(ForensicFinding.model_validate_json(row["finding_json"]) for row in rows)
+
     def list_logs(self, limit: int = 500, search: str = "") -> list[LogRecord]:
         query = "SELECT * FROM logs"
         params: list[Any] = []
         if search:
-            query += " WHERE event LIKE ? OR message LIKE ? OR context_json LIKE ?"
-            term = f"%{search}%"
+            query += " WHERE event LIKE ? ESCAPE '\\' OR message LIKE ? ESCAPE '\\' OR context_json LIKE ? ESCAPE '\\'"
+            term = self._search_term(search)
             params.extend((term, term, term))
         query += " ORDER BY occurred_at DESC LIMIT ?"
         params.append(limit)
@@ -366,6 +525,8 @@ class Database:
             label=row["label"],
             threshold=row["threshold"],
             reasons=tuple(json.loads(row["reasons_json"])),
+            feature_values=json.loads(row["evidence_json"]).get("values", {}),
+            missing_fields=tuple(json.loads(row["evidence_json"]).get("missing", [])),
             disposition=row["disposition"],
             source=row["source"],
         )

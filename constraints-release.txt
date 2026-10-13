@@ -1,0 +1,12 @@
+# Model serialization and native bundle validation use these exact versions.
+numpy==2.5.2
+pandas==2.3.3
+psutil==7.2.2
+PySide6==6.11.2
+scikit-learn==1.9.0
+scipy==1.18.1
+skops==0.14.0
+pydantic==2.13.5
+httpx==0.28.1
+pyinstaller==6.22.3
+build==1.6.1

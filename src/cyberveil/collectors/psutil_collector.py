@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import platform
+from collections import Counter
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any, TypeVar
@@ -20,6 +21,8 @@ class PsutilCollector:
         self.max_processes = max_processes
         self._permission_denied: set[str] = set()
         self._unavailable: set[str] = set()
+        self._read_errors: set[str] = set()
+        self._child_counts: Counter[int] = Counter()
 
     @property
     def capabilities(self) -> CapabilityReport:
@@ -38,6 +41,8 @@ class PsutilCollector:
         notes: list[str] = []
         if self._permission_denied:
             notes.append("Some process fields require elevated operating-system permissions.")
+        if self._read_errors:
+            notes.append("Operating-system reads failed for: " + ", ".join(sorted(self._read_errors)))
         return CapabilityReport(
             operating_system=platform.system(),
             available=tuple(sorted(fields)),
@@ -48,7 +53,15 @@ class PsutilCollector:
 
     def collect(self, session_id: str) -> list[TelemetrySample]:
         samples: list[TelemetrySample] = []
-        processes = list(psutil.process_iter())
+        # Build the relationship index once, not once per process (quadratic on macOS).
+        try:
+            processes = list(psutil.process_iter(["pid", "ppid"]))
+        except (PermissionError, psutil.AccessDenied):
+            self._permission_denied.add("processes")
+            return []
+        self._child_counts = Counter(
+            proc.info["ppid"] for proc in processes if isinstance(proc.info.get("ppid"), int)
+        )
         if self.max_processes is not None:
             processes = processes[: self.max_processes]
         for proc in processes:
@@ -68,13 +81,7 @@ class PsutilCollector:
                 cpu = proc.cpu_percent(interval=None)
                 memory = proc.memory_info().rss
                 threads = proc.num_threads()
-                child_default: list[psutil.Process] = []
-                children = self._optional(
-                    lambda: proc.children(),
-                    "parent_child",
-                    default=child_default,
-                )
-                child_count = len(children or [])
+                child_count = self._child_counts[pid]
                 open_files = self._optional_count(proc.open_files, "open_files")
                 io_method = getattr(proc, "io_counters", None)
                 io = self._optional(io_method, "io") if callable(io_method) else None
@@ -88,6 +95,9 @@ class PsutilCollector:
             return None
         except psutil.AccessDenied:
             self._permission_denied.add("processes")
+            return None
+        except RuntimeError as exc:
+            self._handle_syscall_failure(exc, "processes")
             return None
         return TelemetrySample(
             session_id=session_id,
@@ -120,6 +130,8 @@ class PsutilCollector:
             return None
         except (AttributeError, NotImplementedError):
             self._unavailable.add("network_connections")
+        except RuntimeError as exc:
+            self._handle_syscall_failure(exc, "network_connections")
         return None
 
     def _command_hint(self, proc: psutil.Process) -> str | None:
@@ -127,6 +139,9 @@ class PsutilCollector:
             command = proc.cmdline()
         except (psutil.AccessDenied, psutil.NoSuchProcess, psutil.ZombieProcess):
             self._permission_denied.add("command_hint")
+            return None
+        except RuntimeError as exc:
+            self._handle_syscall_failure(exc, "command_hint")
             return None
         if not command:
             return None
@@ -143,7 +158,18 @@ class PsutilCollector:
             return default
         except (AttributeError, NotImplementedError):
             self._unavailable.add(field)
+        except RuntimeError as exc:
+            self._handle_syscall_failure(exc, field)
         return default
+
+    def _handle_syscall_failure(self, error: RuntimeError, field: str) -> None:
+        # psutil can surface this macOS kernel race as RuntimeError rather than
+        # AccessDenied/NoSuchProcess. Do not hide unrelated programming failures.
+        message = str(error)
+        if not message.startswith(("proc_pidinfo(", "proc_pidfdinfo(")) or "syscall failed" not in message:
+            raise error
+        self._unavailable.add(field)
+        self._read_errors.add(field)
 
     def _optional_count(self, function: Callable[[], list[Any]], field: str) -> int | None:
         value = self._optional(function, field)

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from collections.abc import Iterator
-from datetime import timedelta
+from datetime import datetime, timedelta
 from enum import StrEnum
+from random import Random
 
 from cyberveil.domain import ScanSource, TelemetrySample, utc_now
 
@@ -17,10 +18,19 @@ def available_scenarios() -> tuple[str, ...]:
     return tuple(item.value for item in ReplayScenario)
 
 
-def replay_samples(scenario: ReplayScenario, session_id: str, *, steps: int = 18) -> Iterator[list[TelemetrySample]]:
+def replay_samples(
+    scenario: ReplayScenario,
+    session_id: str,
+    *,
+    steps: int = 18,
+    seed: int | None = None,
+    start_time: datetime | None = None,
+) -> Iterator[list[TelemetrySample]]:
     """Generate telemetry records only; no command or payload is executed."""
 
-    now = utc_now()
+    now = start_time or utc_now()
+    rng = Random(seed)
+    scale = rng.uniform(0.7, 1.3) if seed is not None else 1.0
     started_at = now.timestamp() - 90
     for index in range(steps):
         observed = now + timedelta(seconds=index)
@@ -34,8 +44,8 @@ def replay_samples(scenario: ReplayScenario, session_id: str, *, steps: int = 18
                     process_started_at=started_at,
                     name="browser-demo",
                     parent_pid=4100,
-                    cpu_percent=8 + (index % 4) * 2,
-                    rss_bytes=(280 + index) * 1024 * 1024,
+                    cpu_percent=(8 + (index % 4) * 2) * scale,
+                    rss_bytes=int((280 + index) * scale * 1024 * 1024),
                     thread_count=18,
                     child_count=3,
                     connection_count=4 + index % 2,
@@ -70,8 +80,8 @@ def replay_samples(scenario: ReplayScenario, session_id: str, *, steps: int = 18
                 process_started_at=started_at,
                 name="cyberveil-safe-lab",
                 parent_pid=7000,
-                cpu_percent=cpu,
-                rss_bytes=rss_mb * 1024 * 1024,
+                cpu_percent=cpu * scale,
+                rss_bytes=int(rss_mb * scale * 1024 * 1024),
                 thread_count=4 + (index if is_attack_window else 0),
                 child_count=children,
                 connection_count=connections,

@@ -1,19 +1,23 @@
 from __future__ import annotations
 
-import platform
 import threading
-from uuid import uuid4
+import time
 
-from PySide6.QtCore import QObject, QThread, Signal
+from PySide6.QtCore import QObject, QRunnable, QThread, Signal
 
 from cyberveil.collectors import PsutilCollector, ReplayScenario
 from cyberveil.collectors.replay import replay_samples
-from cyberveil.domain import LogRecord, ScanRecord, ScanSource, ScanStatus, utc_now
+from cyberveil.detection import CompositeClassifier
+from cyberveil.domain import AppSettings, LogRecord, ScanSource, ScanStatus
+from cyberveil.engine import MonitoringEngine
+from cyberveil.paths import bundled_model_path
 from cyberveil.storage import Database
 
 
 class ScanThread(QThread):
+    session_started = Signal(str)
     telemetry = Signal(int, int)
+    detection = Signal(object)
     capabilities = Signal(object)
     scan_finished = Signal(str, str)
     failed = Signal(str)
@@ -21,6 +25,7 @@ class ScanThread(QThread):
     def __init__(
         self,
         database: Database,
+        settings: AppSettings,
         *,
         source: ScanSource,
         scenario: ReplayScenario = ReplayScenario.SUSPICIOUS_BURST,
@@ -28,68 +33,86 @@ class ScanThread(QThread):
     ) -> None:
         super().__init__(parent)
         self.database = database
+        self.settings = settings
         self.source = source
         self.scenario = scenario
-        self.session_id = str(uuid4())
-        self.sample_count = 0
         self._stop_requested = threading.Event()
 
     def request_stop(self) -> None:
         self._stop_requested.set()
 
     def run(self) -> None:
-        self.database.create_scan(
-            ScanRecord(
-                session_id=self.session_id,
-                source=self.source,
-                status=ScanStatus.RUNNING,
-                started_at=utc_now(),
-                operating_system=platform.system(),
-                model_version="telemetry-v1",
-            )
-        )
-        self.database.log(
-            LogRecord(
-                event="scan.started",
-                message="Local telemetry session started",
-                context={"session_id": self.session_id, "source": self.source.value},
-            )
+        engine = MonitoringEngine(
+            self.database,
+            CompositeClassifier(bundled_model_path()),
+            self.settings,
+            source=self.source,
         )
         try:
+            engine.start()
+            self.session_started.emit(engine.session_id)
             if self.source == ScanSource.REPLAY:
-                self._run_replay()
+                self._run_replay(engine)
             else:
-                self._run_live()
+                self._run_live(engine)
+                if engine.sample_count == 0 and not self._stop_requested.is_set():
+                    raise RuntimeError("No processes could be observed; check operating-system permissions.")
             status = ScanStatus.STOPPED if self._stop_requested.is_set() else ScanStatus.COMPLETED
-            self._finish(status)
-        except Exception as exc:
-            self._finish(ScanStatus.FAILED, str(exc))
+            engine.finish(status)
+            self.scan_finished.emit(engine.session_id, status.value)
+        except Exception as exc:  # worker boundary reports and records failure
+            engine.finish(ScanStatus.FAILED, str(exc))
             self.failed.emit(str(exc))
 
-    def _run_replay(self) -> None:
-        for batch in replay_samples(self.scenario, self.session_id):
+    def _run_replay(self, engine: MonitoringEngine) -> None:
+        for batch in replay_samples(self.scenario, engine.session_id):
             if self._stop_requested.is_set():
                 break
-            self.sample_count += len(batch)
-            self.telemetry.emit(self.sample_count, len(batch))
+            for result in engine.ingest(batch):
+                self.detection.emit(result)
+            self.telemetry.emit(engine.sample_count, len(batch))
             self.msleep(130)
 
-    def _run_live(self) -> None:
+    def _run_live(self, engine: MonitoringEngine) -> None:
         collector = PsutilCollector()
-        while not self._stop_requested.wait(1.0):
-            batch = collector.collect(self.session_id)
-            self.sample_count += len(batch)
-            self.capabilities.emit(collector.capabilities)
-            self.telemetry.emit(self.sample_count, len(batch))
+        last_capabilities = None
+        next_sample = time.monotonic()
+        while not self._stop_requested.wait(max(0, next_sample - time.monotonic())):
+            batch = collector.collect(engine.session_id)
+            for result in engine.ingest(batch):
+                self.detection.emit(result)
+            capabilities = collector.capabilities
+            self.capabilities.emit(capabilities)
+            if capabilities != last_capabilities:
+                self.database.log(LogRecord(
+                    level="WARNING" if capabilities.is_degraded else "INFO",
+                    event="telemetry.capabilities", message="Telemetry capabilities updated",
+                    context={"session_id": engine.session_id, **capabilities.model_dump(mode="json")},
+                ))
+                last_capabilities = capabilities
+            self.telemetry.emit(engine.sample_count, len(batch))
+            next_sample = max(next_sample + 1.0, time.monotonic())
 
-    def _finish(self, status: ScanStatus, error: str | None = None) -> None:
-        self.database.finish_scan(self.session_id, status, self.sample_count, 0, error)
-        self.database.log(
-            LogRecord(
-                level="ERROR" if error else "INFO",
-                event="scan.finished",
-                message=error or f"Telemetry session {status.value}",
-                context={"session_id": self.session_id, "samples": self.sample_count},
-            )
-        )
-        self.scan_finished.emit(self.session_id, status.value)
+
+class JobSignals(QObject):
+    succeeded = Signal(object)
+    failed = Signal(str)
+    failed_with_context = Signal(object, str)
+
+
+class FunctionJob(QRunnable):
+    def __init__(self, function: object, *args: object, **kwargs: object) -> None:
+        super().__init__()
+        self.function = function
+        self.args = args
+        self.kwargs = kwargs
+        self.signals = JobSignals()
+
+    def run(self) -> None:
+        try:
+            result = self.function(*self.args, **self.kwargs)  # type: ignore[operator]
+        except Exception as exc:
+            self.signals.failed_with_context.emit(self.args[0] if self.args else None, str(exc))
+            self.signals.failed.emit(str(exc))
+        else:
+            self.signals.succeeded.emit(result)

@@ -45,7 +45,7 @@ def create_application() -> QApplication:
     return app
 
 
-def run() -> int:
+def run(*, smoke_test: bool = False) -> int:
     app = create_application()
     splash = _splash()
     splash.show()
@@ -57,4 +57,6 @@ def run() -> int:
         splash.finish(window)
 
     QTimer.singleShot(700, reveal_window)
+    if smoke_test:
+        QTimer.singleShot(3000, window.close)
     return app.exec()

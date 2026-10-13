@@ -1,0 +1,39 @@
+{
+  "application_version": "0.3.0",
+  "date": "2026-10-05",
+  "platform": "macOS 26.5 arm64",
+  "python": "3.13.12",
+  "tests_passed": 96,
+  "ruff": "passed",
+  "mypy": {"status": "passed", "application_modules": 38},
+  "native_macos_bundle": {
+    "status": "passed",
+    "fresh_data_directory": true,
+    "checks": ["model load", "safe replay", "English and Arabic PDF JSON CSV", "harmless child termination", "GUI smoke"]
+  },
+  "native_windows_gui": "not run",
+  "native_linux_gui": "not run",
+  "linux_guest_headless": "passed model loading and live collection",
+  "real_memory_image": "not tested",
+  "real_ollama_model": "not tested; localhost service unavailable",
+  "synthetic_feature_inference_storage_p95_ms": 0.09376009911647991,
+  "runtime_cpu_target_passed": false,
+  "runtime_memory_target_passed": true,
+  "real_specimen_executed": true,
+  "real_specimen_detected": false,
+  "malware_vm_disks_removed_after_shutdown": true,
+  "video": {
+    "filename": "CYBERVEIL_Full_Demo.mp4",
+    "duration_seconds": 319.2,
+    "dimensions": [1600, 1000],
+    "fps": 10,
+    "captions": "Arabic",
+    "voice_track": false,
+    "recorded_segments": 2,
+    "sha256": "92ce1f60957e0926c832b65c7a819b6be7949fea5145a5da2c092b4878e95daa",
+    "decode_check": "passed"
+  },
+  "vm_evidence_sha256": "eb325cea6e66cb431753a6acb52dd6abe3ddd051d695fe67af47c0cbd75eab06",
+  "git_pushed": false,
+  "production_ready": false
+}

@@ -31,4 +31,4 @@ def report_dir() -> Path:
 
 
 def bundled_model_path() -> Path:
-    return Path(__file__).resolve().parents[2] / "data" / "models" / "behavior-model.skops"
+    return Path(__file__).resolve().parent / "data" / "models" / "behavior-model.skops"

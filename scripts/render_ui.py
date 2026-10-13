@@ -6,9 +6,16 @@ from pathlib import Path
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
+from cyberveil.collectors import ReplayScenario
+from cyberveil.collectors.replay import replay_samples
+from cyberveil.detection import CompositeClassifier
+from cyberveil.domain import AppSettings, ScanSource
+from cyberveil.engine import MonitoringEngine
+from cyberveil.paths import bundled_model_path
 from cyberveil.storage import Database
 from cyberveil.ui.app import create_application
 from cyberveil.ui.main_window import MainWindow
+from cyberveil.ui.pages import DetectionDialog
 
 
 def parse_args() -> argparse.Namespace:
@@ -27,6 +34,14 @@ def main() -> int:
     output.parent.mkdir(parents=True, exist_ok=True)
     app = create_application()
     database = Database(Path("tmp/render-ui.db"))
+    engine = MonitoringEngine(
+        database, CompositeClassifier(bundled_model_path()), AppSettings(), source=ScanSource.REPLAY
+    )
+    engine.start()
+    results = []
+    for batch in replay_samples(ReplayScenario.SUSPICIOUS_BURST, engine.session_id):
+        results.extend(engine.ingest(batch))
+    engine.finish()
     window = MainWindow(database)
     settings = window.settings.model_copy(update={"language": args.language})
     window.save_settings(settings)
@@ -35,7 +50,15 @@ def main() -> int:
     window.resize(args.width, args.height)
     window.show()
     app.processEvents()
-    if not window.grab().save(str(output)):
+    target = window
+    if args.page == "alert":
+        target = DetectionDialog(window.translator, results[-1], window)
+        target.show()
+        app.processEvents()
+    elif args.page == "report":
+        window.open_report(engine.session_id)
+        app.processEvents()
+    if not target.grab().save(str(output)):
         return 1
     window.close()
     print(output)

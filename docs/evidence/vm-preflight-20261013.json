@@ -1,0 +1,13 @@
+{
+  "checked_epoch": 1791904798.712524,
+  "checks": {
+    "desktop_read_denied": true,
+    "other_ssd_folder_read_denied": true,
+    "data_volume_alias_read_denied": true,
+    "outbound_connection_denied": true,
+    "outside_lab_write_denied": true,
+    "guest_harness_rejects_macos": true,
+    "hvf_initializes_inside_host_sandbox": true
+  },
+  "sandbox_profile_sha256": "fd3e3ef53689ec3a24227dbe0f530556e6a4dac517711f245ddc87432d6b903f"
+}

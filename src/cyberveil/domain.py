@@ -20,6 +20,7 @@ class ScanSource(StrEnum):
     LIVE = "live"
     REPLAY = "replay"
     FORENSIC = "forensic"
+    DEMO_PROCESS = "demo_process"
 
 
 class ScanStatus(StrEnum):
@@ -120,6 +121,8 @@ class DetectionResult(FrozenModel):
     label: str
     threshold: float = Field(ge=0, le=1)
     reasons: tuple[str, ...] = ()
+    feature_values: dict[str, float] = Field(default_factory=dict)
+    missing_fields: tuple[str, ...] = ()
     disposition: DetectionDisposition = DetectionDisposition.OPEN
     source: ScanSource = ScanSource.LIVE
 
@@ -174,6 +177,11 @@ class ForensicFinding(FrozenModel):
     details: dict[str, Any] = Field(default_factory=dict)
 
 
+class ForensicAnalysis(FrozenModel):
+    session_id: str
+    findings: tuple[ForensicFinding, ...]
+
+
 class IncidentReport(FrozenModel):
     report_id: str = Field(default_factory=lambda: str(uuid4()))
     generated_at: datetime = Field(default_factory=utc_now)
@@ -193,5 +201,5 @@ class AppSettings(BaseModel):
     retention_days: int = Field(default=30, ge=1, le=365)
     redact_sensitive: bool = True
     ollama_enabled: bool = False
-    ollama_model: str = ""
+    ollama_model: str = Field(default="", max_length=200, pattern=r"^[A-Za-z0-9_.:/-]*$")
     reduced_motion: bool = False

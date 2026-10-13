@@ -1,0 +1,18 @@
+{
+  "platform": "macOS-26.5-arm64-arm-64bit-Mach-O",
+  "architecture": "arm64",
+  "qt_platform": "native",
+  "duration_seconds": 29.85,
+  "average_cpu_percent_one_core": 33.779310344827586,
+  "peak_rss_mb": 246.203125,
+  "samples": 17497,
+  "detections": 0,
+  "status": "stopped",
+  "actions_taken": 0,
+  "targets": {
+    "average_cpu_below_percent": 5,
+    "peak_rss_below_mb": 300
+  },
+  "scope": "development Mac, live GUI and pipeline; not a cross-platform benchmark",
+  "targets_passed": false
+}

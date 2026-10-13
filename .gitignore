@@ -18,5 +18,6 @@ htmlcov/
 *.skops
 *.onnx
 *.log
-reports/
+/reports/
+!src/cyberveil/data/models/*.skops
 tmp/
