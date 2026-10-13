@@ -72,11 +72,12 @@ def test_full_exports_include_actions_forensics_and_redact(database, incident, t
         target = tmp_path / f"report.{format_name}"
         getattr(service, f"export_{format_name}")(incident, target, language=language)
         assert target.stat().st_size > 100
-    data = json.loads((tmp_path / "report.json").read_text())
+    json_text = (tmp_path / "report.json").read_text(encoding="utf-8")
+    data = json.loads(json_text)
     assert data["redacted"] is True
     assert data["language"] == language
     assert data["actions"] and data["forensic_findings"]
-    assert "private" not in (tmp_path / "report.json").read_text()
+    assert "private" not in json_text
     assert "private" not in (tmp_path / "report.csv").read_text(encoding="utf-8-sig")
     assert incident.detections[0].process_name == "private-client-name.exe"
     assert data["detections"][0]["feature_values"]["rss_delta_mb"] == 200
