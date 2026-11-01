@@ -48,6 +48,11 @@ def test_classifier_ignores_verdict_names_and_identity(report_file: Path, tmp_pa
     assert scan and scan.source == ScanSource.SANDBOX and scan.blocked_count == 0
     built = ReportService(database).build(scan.session_id)
     assert built.forensic_findings[0].details["actions_taken"] == 0
+    html = ReportService.to_html(built)
+    assert "Recorded sandbox evidence" in html and "Import started" in html
+    assert "Offline memory analysis" not in html
+    arabic = ReportService.to_html(built, language="ar")
+    assert f'dir="ltr" style="margin:0; text-align:left;">{scan.session_id}</p>' in arabic
     ReportService(database).export_json(built, tmp_path / "export.json", redact_sensitive=False)
     assert json.loads((tmp_path / "export.json").read_text())["scan"]["source"] == "sandbox_report"
     database.close()

@@ -292,8 +292,8 @@ class ReportService:
             ("source", tr.observation(scan.source.value)),
             ("status", tr.observation(scan.status.value)),
             ("model", scan.model_version),
-            ("started", tr.format_datetime(scan.started_at)),
-            ("ended", tr.format_datetime(scan.ended_at)),
+            ("import_started" if scan.source == ScanSource.SANDBOX else "started", tr.format_datetime(scan.started_at)),
+            ("import_ended" if scan.source == ScanSource.SANDBOX else "ended", tr.format_datetime(scan.ended_at)),
             ("api_calls" if scan.source == ScanSource.SANDBOX else "samples", str(scan.sample_count)),
             ("detections", str(scan.detection_count)),
             ("blocked", str(scan.blocked_count)),
@@ -316,15 +316,18 @@ class ReportService:
             pieces.append(f"<p><b>{tr('incomplete_report')}</b></p>")
         if scan.error:
             pieces.append(f"<p>{tr('error')}: {esc(scan.error)}</p>")
-        pieces.append(
-            table
-            + "".join(
-                (f"<tr><td>{esc(value)}</td><td><b>{tr(key)}</b></td></tr>" if tr.is_rtl
-                 else f"<tr><td><b>{tr(key)}</b></td><td>{esc(value)}</td></tr>")
-                for key, value in metadata
-            )
-            + "</table>"
-        )
+        pieces.append(table)
+        for key, value in metadata:
+            # UUIDs start with bidi-neutral digits; give technical identifiers an
+            # explicit LTR paragraph so Arabic does not reorder their groups.
+            rendered = esc(value)
+            if key in ("scan_id", "model"):
+                rendered = f'<p dir="ltr" style="margin:0; text-align:left;">{rendered}</p>'
+            if tr.is_rtl:
+                pieces.append(f"<tr><td>{rendered}</td><td><b>{tr(key)}</b></td></tr>")
+            else:
+                pieces.append(f"<tr><td><b>{tr(key)}</b></td><td>{rendered}</td></tr>")
+        pieces.append("</table>")
         pieces.append(f"<h2>{tr('detections')}</h2>")
         if not report.detections:
             key = "sandbox_not_flagged" if scan.source == ScanSource.SANDBOX else "no_threat"
@@ -338,7 +341,8 @@ class ReportService:
             )
             pieces.append(f"<h3>{esc(title)}</h3>")
             pieces.append(
-                f"<p>{tr('score')}: {item.score:.1%} | {tr('severity')}: "
+                f"<p>{tr('score')}: {item.score:.1%} | {tr('decision_threshold')}: {item.threshold:.1%} | "
+                f"{tr('severity')}: "
                 f"{tr.observation(item.severity.value)} | {tr('action')}: "
                 f"{tr.observation(item.disposition.value)}</p>"
             )
@@ -361,12 +365,12 @@ class ReportService:
                     f"{tr.observation(action.action.value)} | {tr.observation(action.status.value)}<br>"
                     f"{esc(action.message)}<br>{esc(action.detection_id)}</p>"
                 )
-            pieces.append(f"<h2>{tr('forensics')}</h2>")
+            pieces.append(f"<h2>{tr('sandbox_evidence' if scan.source == ScanSource.SANDBOX else 'forensics')}</h2>")
             if not report.forensic_findings:
                 pieces.append(f"<p>{tr('no_forensics')}</p>")
             for finding in report.forensic_findings:
                 pieces.append(
-                    f"<h3>{esc(finding.title)}</h3><p>{esc(finding.plugin)} | "
+                    f"<h3>{esc(tr.observation(finding.title))}</h3><p>{esc(finding.plugin)} | "
                     f"{esc(tr.observation(finding.category))}</p>"
                 )
                 for line in json.dumps(finding.details, ensure_ascii=False, indent=2).splitlines():
