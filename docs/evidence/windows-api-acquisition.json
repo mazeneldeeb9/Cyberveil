@@ -1,0 +1,12 @@
+{
+  "verified_at": "2026-11-01T13:57:59.913100+00:00",
+  "source": "https://zenodo.org/records/16414116/files/WinMET_volume_1.7z",
+  "size_bytes": 2610691048,
+  "publisher_md5": "bf51181eafc8452090bb6ce9f47b6714",
+  "local_sha256": "52b27fd57ae2bf0b914244d412cd4a622fd1233321c0e5eccea2f042f714296b",
+  "publisher_md5_matched": true,
+  "range_index_head_and_tail_match_full_archive": true,
+  "raw_reports_committed": false,
+  "standalone_malware_downloaded_or_executed": false,
+  "final_selected_report_files": 20
+}

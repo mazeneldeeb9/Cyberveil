@@ -6,6 +6,14 @@ from PySide6.QtCore import QDateTime, QLocale
 
 TEXT: dict[str, dict[str, str]] = {
     "en": {
+        "import_sandbox": "Analyze sandbox report",
+        "sandbox_detail": "Classify recorded Windows API calls from CAPE/Cuckoo. No sample is executed.",
+        "sandbox_running": "Analyzing recorded Windows API behavior…",
+        "sandbox_failed": "Sandbox report could not be analyzed",
+        "sandbox_detection": "Recorded sandbox behavior flagged",
+        "sandbox_no_block": "Recorded evidence cannot authorize blocking a process on this computer.",
+        "sandbox_not_flagged": "The model did not flag this recorded trace. This does not establish a clean result.",
+        "api_calls": "Recorded API calls",
         "app_name": "CYBERVEIL",
         "experimental_model": "Experimental lab model. Live process termination always requires confirmation.",
         "demo_process": "Try harmless process termination",
@@ -126,6 +134,14 @@ TEXT: dict[str, dict[str, str]] = {
         "seconds": "s",
     },
     "ar": {
+        "import_sandbox": "تحليل تقرير بيئة معزولة",
+        "sandbox_detail": "تصنيف استدعاءات Windows المسجلة في CAPE/Cuckoo. لا تُشغَّل أي عينة.",
+        "sandbox_running": "جارٍ تحليل سلوك Windows المسجل…",
+        "sandbox_failed": "تعذر تحليل تقرير البيئة المعزولة",
+        "sandbox_detection": "رُصد سلوك مشبوه في التقرير المسجل",
+        "sandbox_no_block": "الأدلة المسجلة لا تسمح بإيقاف عملية على هذا الجهاز.",
+        "sandbox_not_flagged": "لم يصنّف النموذج هذا السجل كمشبوه. لا تثبت هذه النتيجة خلو العينة من الضرر.",
+        "api_calls": "استدعاءات API المسجلة",
         "app_name": "CYBERVEIL",
         "experimental_model": "نموذج مختبري تجريبي. يتطلب إيقاف العمليات الفعلية تأكيداً دائماً.",
         "demo_process": "تجربة إيقاف عملية آمنة",
@@ -326,6 +342,8 @@ class Translator:
         return TEXT[self.language].get(key, TEXT["en"].get(key, key))
 
     def observation(self, value: str) -> str:
+        if value == "sandbox_report":
+            return "تقرير بيئة معزولة" if self.is_rtl else "Sandbox report"
         if not self.is_rtl:
             return value
         return {
@@ -353,6 +371,13 @@ class Translator:
             "stale_process": "تغيرت هوية العملية",
             "analysis_error": "خطأ في التحليل",
             "memory_analysis": "تحليل الذاكرة",
+            "sandbox_behavior": "سلوك بيئة معزولة",
+            "Windows API behavior model exceeded its validated selection threshold": (
+                "تجاوزت درجة نموذج سلوك Windows حد القرار المحدد على بيانات التحقق"
+            ),
+            "Offline execution evidence; no local process was blocked": (
+                "أدلة تنفيذ مسجلة؛ لم تُوقَف أي عملية محلية"
+            ),
             "Sustained high CPU activity": "نشاط مرتفع للمعالج",
             "Rapid memory growth": "نمو سريع في الذاكرة",
             "Large memory delta": "تغير كبير في الذاكرة",

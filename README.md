@@ -1,8 +1,19 @@
-# CYBERVEIL Phase 3
+# CYBERVEIL 0.4.0
 
 CYBERVEIL is a safe academic desktop demonstrator for behavior-based detection of fileless-malware-like activity. It combines local process telemetry, deterministic replay scenarios, an explainable scikit-learn classifier, guarded remediation, bilingual reports, optional memory-image analysis, and an optional local Ollama explainer.
 
 The software is not a replacement for production endpoint protection. It never ships or executes malware, and its bundled demonstrations use generated telemetry and a harmless child process.
+
+## Real Windows execution-report detection
+
+Version 0.4.0 adds a separate random-forest classifier trained on real malicious and benign Windows API traces from MalBehavD-V1. On the dashboard choose **Analyze sandbox report** and select an original CAPE/Cuckoo JSON containing inline `behavior.processes[].calls[].api` records and `target.file.sha256`. Results appear in History, Notifications and Reports, with English/Arabic exports. Import never executes the specimen or permits local process blocking.
+
+```bash
+cyberveil analyze-sandbox /path/to/original-report.json --output result.json
+cyberveil export-report SESSION_ID --format pdf --language ar --output report-ar.pdf
+```
+
+The frozen model flagged **7 of 20 fresh published WinMET reports**; 13 were not flagged. Its repeated corpus-test evaluation had 96% precision, 76.2% recall and 0.95% benign false-positive rate. These are limited research measurements: the recall gate failed and cross-corpus performance remains weak. Live psutil monitoring retains its synthetic model and existing limitations. See [the measured result and demonstration instructions](docs/REAL_DETECTION_RESULT_20261101.md), [the API model card](docs/WINDOWS_API_MODEL_CARD.md), and [third-party attribution](docs/API_DATA_ATTRIBUTION.md).
 
 ## Quick start
 

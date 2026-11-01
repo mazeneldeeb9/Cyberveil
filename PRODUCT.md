@@ -26,6 +26,8 @@ The product demonstrates local, behavior-based detection of activity that may le
 
 Users run the native desktop application locally, start or stop monitoring, inspect live status, review detections and logs, export reports, and optionally import a memory image for offline Volatility analysis. Development and evaluation use benign telemetry plus deterministic synthetic/replayed threat scenarios. Each of the three implementation phases lasts two weeks.
 
+On 1 November 2026 the user accepted a real Windows sandbox execution-report workflow for the malware-detection demonstration. Version 0.4.0 adds data-only CAPE/Cuckoo JSON import and a separate random-forest API-presence classifier trained on published real traces. Imported evidence is labelled historical, never authorizes local termination, and preserves both flagged and unflagged outcomes. This workflow does not establish real-time or fileless-malware protection.
+
 ## Capabilities and Constraints
 
 - Cross-platform process, CPU, memory, relationship, I/O, and best-effort network telemetry through psutil.
@@ -34,6 +36,7 @@ Users run the native desktop application locally, start or stop monitoring, insp
 - Complete English and Arabic UI with right-to-left layout support.
 - SQLite storage, local report export, and optional local-only Ollama explanations.
 - Volatility analyzes user-supplied memory images; CYBERVEIL does not acquire memory.
+- Recorded Windows API analysis uses a separate experimental model and decision threshold; live monitoring settings do not configure that model.
 - No mobile app, enterprise network management, cloud service, live-malware execution, kernel driver, or production endpoint-security claim.
 
 ## Brand Commitments
@@ -45,6 +48,7 @@ Preserve the CYBERVEIL name, shield/circuit motif, dark navy environment, teal o
 - `CYBERVEIL Project Brief EN AR.pdf`: bilingual product brief.
 - Nine `WhatsApp Image 2026-09-02 ...` JPEG files: visual and screen-flow references.
 - No dataset, source code, verified benchmark, customer claim, or production detection evidence was supplied; future work must not fabricate them.
+- Subsequent research acquired the feature-only MalBehavD-V1 corpus and published WinMET JSON reports. Measured outcomes and failures are recorded in `docs/REAL_DETECTION_RESULT_20261101.md`; production detection remains unvalidated.
 
 ## Product Principles
 

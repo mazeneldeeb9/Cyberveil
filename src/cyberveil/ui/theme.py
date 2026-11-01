@@ -42,6 +42,14 @@ def stylesheet() -> str:
     QLabel#heroTitle {{ font-size: 34px; font-weight: 750; }}
     QLabel#sectionTitle {{ font-size: 19px; font-weight: 700; }}
     QLabel#body {{ color: {c["muted"]}; font-size: 15px; }}
+    QFileDialog QTreeView, QFileDialog QListView {{
+        background: {c["surface"]};
+        alternate-background-color: {c["surface_raised"]};
+        color: {c["text"]};
+        selection-background-color: {c["surface_hover"]};
+        selection-color: {c["text"]};
+    }}
+    QFileDialog QHeaderView::section {{ background: {c["surface_raised"]}; color: {c["text"]}; }}
     QLabel#muted {{ color: {c["muted"]}; }}
     QLabel#dim {{ color: {c["dim"]}; font-size: 12px; }}
     QLabel#metricValue {{ font-size: 24px; font-weight: 750; color: {c["text"]}; }}

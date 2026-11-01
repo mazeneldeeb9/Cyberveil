@@ -30,6 +30,12 @@ from cyberveil.ui.pages import DetectionDialog
 
 
 class Walkthrough:
+    CAPTURE_TITLE = "CYBERVEIL — Full Phase 3 Demonstration"
+    HEADER_LABEL = "CYBERVEIL  /  PHASE 03"
+    CAPTURE_COMMENT = (
+        "Actual Qt app capture with Arabic captions; isolated demo database. "
+        "Safe replay, harmless child containment, and a labelled external VM experiment when supplied."
+    )
     WIDTH, HEIGHT, FPS = 1600, 1000, 10
     APP_X, APP_Y, APP_W, APP_H = 80, 54, 1440, 820
     DURATION = 320
@@ -91,10 +97,9 @@ class Walkthrough:
                 "-movflags",
                 "+faststart",
                 "-metadata",
-                "title=CYBERVEIL — Full Phase 3 Demonstration",
+                "title=" + self.CAPTURE_TITLE,
                 "-metadata",
-                "comment=Actual Qt app capture with Arabic captions; isolated demo database. "
-                "Safe replay, harmless child containment, and a labelled external VM experiment when supplied.",
+                "comment=" + self.CAPTURE_COMMENT,
                 str(output),
             ],
             stdin=subprocess.PIPE,
@@ -508,7 +513,7 @@ class Walkthrough:
         frame.fill(QColor("#030C15"))
         painter = QPainter(frame)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        self.text(painter, QRect(80, 10, 740, 32), "CYBERVEIL  /  PHASE 03", 18, "#90F4EA", bold=True, right=False)
+        self.text(painter, QRect(80, 10, 740, 32), self.HEADER_LABEL, 18, "#90F4EA", bold=True, right=False)
         self.text(painter, QRect(900, 10, 620, 32), "عرض من التطبيق الفعلي  •  بيئة تجريبية مستقلة", 17, "#A9C0CC")
         app_rect = QRect(self.APP_X, self.APP_Y, self.APP_W, self.APP_H)
         painter.drawPixmap(app_rect, self.vm_console.grab() if self.vm_console else self.window.grab())

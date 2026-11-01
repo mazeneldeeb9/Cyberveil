@@ -20,4 +20,4 @@ demo = EXE(pyz, demo_scripts, [], exclude_binaries=True, name="CYBERVEIL-demo", 
 coll = COLLECT(exe, demo, a.binaries, a.datas, name="CYBERVEIL")
 if sys.platform == "darwin":
     app = BUNDLE(coll, name="CYBERVEIL.app", bundle_identifier="lab.cyberveil.desktop",
-                 info_plist={"CFBundleShortVersionString": "0.3.0", "NSHighResolutionCapable": True})
+                 info_plist={"CFBundleShortVersionString": "0.4.0", "NSHighResolutionCapable": True})

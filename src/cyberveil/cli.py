@@ -66,6 +66,12 @@ def build_parser() -> argparse.ArgumentParser:
     memory.add_argument("image", type=Path)
     memory.add_argument("--os", choices=("windows", "linux", "mac"), required=True)
 
+    sandbox = subparsers.add_parser(
+        "analyze-sandbox", help="Classify recorded Windows API behavior from CAPE/Cuckoo JSON",
+    )
+    sandbox.add_argument("report", type=Path)
+    sandbox.add_argument("--output", type=Path, help="Save scores and provenance as JSON; no malware is executed")
+
     export = subparsers.add_parser("export-report", help="Export a stored scan report")
     export.add_argument("session_id")
     export.add_argument("--format", choices=("json", "csv", "pdf"), default="json")
@@ -91,10 +97,20 @@ def _main(argv: list[str] | None = None) -> int:
         return run(smoke_test=getattr(args, "smoke_test", False))
     if command == "doctor":
         classifier = CompositeClassifier(bundled_model_path())
+        from cyberveil.detection.api_model import ApiBehaviorClassifier
+
+        api_status: dict[str, object]
+        try:
+            api_model = ApiBehaviorClassifier()
+            api_status = {"model": api_model.version, "threshold": api_model.threshold,
+                          "mode": "recorded_sandbox_report", "load_error": None, "experimental": True}
+        except (OSError, ValueError) as exc:
+            api_status = {"load_error": str(exc)}
         print(json.dumps({"version": __version__, "platform": platform.platform(),
                           "model": classifier.version, "model_load_error": classifier.load_error,
+                          "windows_api_detector": api_status,
                           "lab_only": True, "data_directory": str(database_path().parent)}, indent=2))
-        return int(classifier.load_error is not None)
+        return int(classifier.load_error is not None or api_status["load_error"] is not None)
     if command == "replay":
         return _replay(ReplayScenario(args.scenario))
     if command == "demo-remediation":
@@ -126,6 +142,20 @@ def _main(argv: list[str] | None = None) -> int:
             analysis = ForensicService(database).analyze(args.image, args.os)
             print(analysis.model_dump_json(indent=2))
             return int(any(f.category == "analysis_error" for f in analysis.findings))
+        finally:
+            database.close()
+    if command == "analyze-sandbox":
+        from cyberveil.forensics.sandbox import SandboxAnalysisService
+
+        database = Database(database_path())
+        try:
+            sandbox_result = SandboxAnalysisService(database).analyze(args.report)
+            serialized = json.dumps(sandbox_result, indent=2)
+            if args.output:
+                args.output.parent.mkdir(parents=True, exist_ok=True)
+                args.output.write_text(serialized + "\n", encoding="utf-8")
+            print(serialized)
+            return 0
         finally:
             database.close()
     if command == "export-report":

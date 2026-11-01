@@ -1,0 +1,387 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-01T14:00:22.836299+00:00",
+  "title": "Design System: CYBERVEIL",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "neutral",
+        "displayName": "Deep Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0338 254.13)",
+          "oklch(26% 0.0338 254.13)",
+          "oklch(38% 0.0338 254.13)",
+          "oklch(49% 0.0338 254.13)",
+          "oklch(61% 0.0338 254.13)",
+          "oklch(72% 0.0338 254.13)",
+          "oklch(84% 0.0338 254.13)",
+          "oklch(95% 0.0338 254.13)"
+        ]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Navy Field",
+        "tonalRamp": [
+          "oklch(15% 0.0373 248.56)",
+          "oklch(26% 0.0373 248.56)",
+          "oklch(38% 0.0373 248.56)",
+          "oklch(49% 0.0373 248.56)",
+          "oklch(61% 0.0373 248.56)",
+          "oklch(72% 0.0373 248.56)",
+          "oklch(84% 0.0373 248.56)",
+          "oklch(95% 0.0373 248.56)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Panel Navy",
+        "tonalRamp": [
+          "oklch(15% 0.0481 250.19)",
+          "oklch(26% 0.0481 250.19)",
+          "oklch(38% 0.0481 250.19)",
+          "oklch(49% 0.0481 250.19)",
+          "oklch(61% 0.0481 250.19)",
+          "oklch(72% 0.0481 250.19)",
+          "oklch(84% 0.0481 250.19)",
+          "oklch(95% 0.0481 250.19)"
+        ]
+      },
+      "surface-raised": {
+        "role": "neutral",
+        "displayName": "Raised Navy",
+        "tonalRamp": [
+          "oklch(15% 0.0542 248.27)",
+          "oklch(26% 0.0542 248.27)",
+          "oklch(38% 0.0542 248.27)",
+          "oklch(49% 0.0542 248.27)",
+          "oklch(61% 0.0542 248.27)",
+          "oklch(72% 0.0542 248.27)",
+          "oklch(84% 0.0542 248.27)",
+          "oklch(95% 0.0542 248.27)"
+        ]
+      },
+      "surface-hover": {
+        "role": "neutral",
+        "displayName": "Hover Navy",
+        "tonalRamp": [
+          "oklch(15% 0.0583 246.68)",
+          "oklch(26% 0.0583 246.68)",
+          "oklch(38% 0.0583 246.68)",
+          "oklch(49% 0.0583 246.68)",
+          "oklch(61% 0.0583 246.68)",
+          "oklch(72% 0.0583 246.68)",
+          "oklch(84% 0.0583 246.68)",
+          "oklch(95% 0.0583 246.68)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Steel Divider",
+        "tonalRamp": [
+          "oklch(15% 0.0558 239.85)",
+          "oklch(26% 0.0558 239.85)",
+          "oklch(38% 0.0558 239.85)",
+          "oklch(49% 0.0558 239.85)",
+          "oklch(61% 0.0558 239.85)",
+          "oklch(72% 0.0558 239.85)",
+          "oklch(84% 0.0558 239.85)",
+          "oklch(95% 0.0558 239.85)"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Operating Teal",
+        "tonalRamp": [
+          "oklch(15% 0.1323 186.19)",
+          "oklch(26% 0.1323 186.19)",
+          "oklch(38% 0.1323 186.19)",
+          "oklch(49% 0.1323 186.19)",
+          "oklch(61% 0.1323 186.19)",
+          "oklch(72% 0.1323 186.19)",
+          "oklch(84% 0.1323 186.19)",
+          "oklch(95% 0.1323 186.19)"
+        ]
+      },
+      "accent-deep": {
+        "role": "primary",
+        "displayName": "Deep Teal",
+        "tonalRamp": [
+          "oklch(15% 0.1004 190.45)",
+          "oklch(26% 0.1004 190.45)",
+          "oklch(38% 0.1004 190.45)",
+          "oklch(49% 0.1004 190.45)",
+          "oklch(61% 0.1004 190.45)",
+          "oklch(72% 0.1004 190.45)",
+          "oklch(84% 0.1004 190.45)",
+          "oklch(95% 0.1004 190.45)"
+        ]
+      },
+      "accent-soft": {
+        "role": "primary",
+        "displayName": "Soft Teal",
+        "tonalRamp": [
+          "oklch(15% 0.0955 187.40)",
+          "oklch(26% 0.0955 187.40)",
+          "oklch(38% 0.0955 187.40)",
+          "oklch(49% 0.0955 187.40)",
+          "oklch(61% 0.0955 187.40)",
+          "oklch(72% 0.0955 187.40)",
+          "oklch(84% 0.0955 187.40)",
+          "oklch(95% 0.0955 187.40)"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Pale Text",
+        "tonalRamp": [
+          "oklch(15% 0.0060 223.46)",
+          "oklch(26% 0.0060 223.46)",
+          "oklch(38% 0.0060 223.46)",
+          "oklch(49% 0.0060 223.46)",
+          "oklch(61% 0.0060 223.46)",
+          "oklch(72% 0.0060 223.46)",
+          "oklch(84% 0.0060 223.46)",
+          "oklch(95% 0.0060 223.46)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted Blue Gray",
+        "tonalRamp": [
+          "oklch(15% 0.0304 230.41)",
+          "oklch(26% 0.0304 230.41)",
+          "oklch(38% 0.0304 230.41)",
+          "oklch(49% 0.0304 230.41)",
+          "oklch(61% 0.0304 230.41)",
+          "oklch(72% 0.0304 230.41)",
+          "oklch(84% 0.0304 230.41)",
+          "oklch(95% 0.0304 230.41)"
+        ]
+      },
+      "dim": {
+        "role": "neutral",
+        "displayName": "Dim Blue Gray",
+        "tonalRamp": [
+          "oklch(15% 0.0391 234.25)",
+          "oklch(26% 0.0391 234.25)",
+          "oklch(38% 0.0391 234.25)",
+          "oklch(49% 0.0391 234.25)",
+          "oklch(61% 0.0391 234.25)",
+          "oklch(72% 0.0391 234.25)",
+          "oklch(84% 0.0391 234.25)",
+          "oklch(95% 0.0391 234.25)"
+        ]
+      },
+      "danger": {
+        "role": "secondary",
+        "displayName": "Alert Coral",
+        "tonalRamp": [
+          "oklch(15% 0.1862 17.79)",
+          "oklch(26% 0.1862 17.79)",
+          "oklch(38% 0.1862 17.79)",
+          "oklch(49% 0.1862 17.79)",
+          "oklch(61% 0.1862 17.79)",
+          "oklch(72% 0.1862 17.79)",
+          "oklch(84% 0.1862 17.79)",
+          "oklch(95% 0.1862 17.79)"
+        ]
+      },
+      "warning": {
+        "role": "secondary",
+        "displayName": "Caution Amber",
+        "tonalRamp": [
+          "oklch(15% 0.1346 84.17)",
+          "oklch(26% 0.1346 84.17)",
+          "oklch(38% 0.1346 84.17)",
+          "oklch(49% 0.1346 84.17)",
+          "oklch(61% 0.1346 84.17)",
+          "oklch(72% 0.1346 84.17)",
+          "oklch(84% 0.1346 84.17)",
+          "oklch(95% 0.1346 84.17)"
+        ]
+      },
+      "info": {
+        "role": "secondary",
+        "displayName": "Information Blue",
+        "tonalRamp": [
+          "oklch(15% 0.1608 258.59)",
+          "oklch(26% 0.1608 258.59)",
+          "oklch(38% 0.1608 258.59)",
+          "oklch(49% 0.1608 258.59)",
+          "oklch(61% 0.1608 258.59)",
+          "oklch(72% 0.1608 258.59)",
+          "oklch(84% 0.1608 258.59)",
+          "oklch(95% 0.1608 258.59)"
+        ]
+      },
+      "success": {
+        "role": "secondary",
+        "displayName": "Observed Success Green",
+        "tonalRamp": [
+          "oklch(15% 0.1472 165.51)",
+          "oklch(26% 0.1472 165.51)",
+          "oklch(38% 0.1472 165.51)",
+          "oklch(49% 0.1472 165.51)",
+          "oklch(61% 0.1472 165.51)",
+          "oklch(72% 0.1472 165.51)",
+          "oklch(84% 0.1472 165.51)",
+          "oklch(95% 0.1472 165.51)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Prominent observation state; inherited Qt family is not a prescribed display face."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Screen titles."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Section and dialog headings."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Supporting explanation."
+      },
+      "control": {
+        "displayName": "Control",
+        "purpose": "Direct action labels."
+      },
+      "metric": {
+        "displayName": "Metric",
+        "purpose": "Compact measured values."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Metric labels and subdued metadata."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Technical logs and forensic text."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "radar-timer",
+        "value": "36ms",
+        "purpose": "Active native radar frame interval; reduced motion stops the timer."
+      },
+      {
+        "name": "radar-step",
+        "value": "3deg",
+        "purpose": "Native sweep advance per active frame."
+      }
+    ],
+    "breakpoints": []
+  },
+  "components": [
+    {
+      "name": "Primary monitoring action",
+      "kind": "button",
+      "description": "Teal primary action, translated from Qt styling.",
+      "html": "<button class=\"ds-primary\">Start live monitoring</button>",
+      "css": ".ds-primary{font-family:system-ui,sans-serif;font-size:14px;font-weight:650;min-height:42px;border-radius:12px;padding:0 18px;color:#F3F8FA;background:#22D3C5;color:#031A1A;border:none;font-size:15px;font-weight:750}.ds-primary:hover{background:#4BE0D4}.ds-primary:focus-visible{outline:2px solid #22D3C5;outline-offset:2px}.ds-primary:active{background:#12283C}",
+      "refersTo": "button-primary"
+    },
+    {
+      "name": "Secondary report analysis",
+      "kind": "button",
+      "description": "Report import uses the incumbent secondary action.",
+      "html": "<button class=\"ds-secondary\">Analyze sandbox report</button>",
+      "css": ".ds-secondary{font-family:system-ui,sans-serif;font-size:14px;font-weight:650;min-height:42px;border-radius:12px;padding:0 18px;color:#F3F8FA;background:#173149;border:1px solid #284A61;}.ds-secondary:hover{background:#1D3B55;border-color:#3A6A83}.ds-secondary:focus-visible{outline:2px solid #22D3C5}.ds-secondary:active{background:#12283C}.ds-secondary:disabled{color:#718C9C;background:#0B1B2A;border-color:#20394A}",
+      "refersTo": "button-secondary"
+    },
+    {
+      "name": "Danger action",
+      "kind": "button",
+      "description": "Guarded remediation; sandbox evidence disables the real native action.",
+      "html": "<button class=\"ds-danger\">Block process</button>",
+      "css": ".ds-danger{font-family:system-ui,sans-serif;font-size:14px;font-weight:650;min-height:42px;border-radius:12px;padding:0 18px;color:#F3F8FA;background:#C94655;color:white;border:none}.ds-danger:hover{background:#E25362}.ds-danger:focus-visible{outline:2px solid #22D3C5;outline-offset:2px}.ds-danger:active{background:#12283C}"
+    },
+    {
+      "name": "Header ghost action",
+      "kind": "button",
+      "description": "Native header action with an accessible name.",
+      "html": "<button class=\"ds-ghost\" aria-label=\"Notifications\"><svg width=\"25\" height=\"25\" viewBox=\"0 0 32 32\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.1\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 22Q11 19 11 13Q11 6 16 6Q21 6 21 13Q21 19 23 22Z M14 25Q16 29 18 25\"/></svg></button>",
+      "css": ".ds-ghost{color:#F3F8FA;background:transparent;border:none;border-radius:12px;min-width:42px;min-height:42px;padding:0 8px}.ds-ghost:hover{background:#173149}.ds-ghost:focus-visible{outline:2px solid #22D3C5}.ds-ghost:active{background:#12283C}",
+      "refersTo": "button-ghost"
+    },
+    {
+      "name": "Evidence filter field",
+      "kind": "input",
+      "description": "Recessed native input translated for the panel.",
+      "html": "<label class=\"ds-field-label\">Search evidence<input class=\"ds-field\" type=\"text\"/></label>",
+      "css": ".ds-field-label{display:grid;gap:8px;color:#A9C0CC;font:14px system-ui,sans-serif}.ds-field{color:#F3F8FA;background:#0B1D2E;min-height:42px;border:1px solid #284A61;border-radius:11px;padding:0 13px;font:14px system-ui,sans-serif}.ds-field:focus-visible{outline:2px solid #22D3C5}.ds-field::selection{background:#0C918C}",
+      "refersTo": "field"
+    },
+    {
+      "name": "Evidence navigation tile",
+      "kind": "nav",
+      "description": "Large dashboard routes to evidence lists.",
+      "html": "<button class=\"ds-tile\"><svg width=\"28\" height=\"28\" viewBox=\"0 0 32 32\" fill=\"none\" stroke=\"#22D3C5\" stroke-width=\"2.1\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"8\" y=\"4\" width=\"16\" height=\"24\" rx=\"2\"/><path d=\"M12 20v4M16 16v8M20 12v12\"/></svg><span>View reports</span></button>",
+      "css": ".ds-tile{display:flex;align-items:center;gap:8px;min-height:112px;padding:18px 20px;border:1px solid #284A61;border-radius:15px;background:#10253A;color:#F3F8FA;font:650 16px system-ui,sans-serif;text-align:start}.ds-tile:hover{background:#173149;border-color:#0C918C}.ds-tile:focus-visible{outline:2px solid #22D3C5}.ds-tile:active{background:#12283C}",
+      "refersTo": "action-tile"
+    },
+    {
+      "name": "Academic context badge",
+      "kind": "chip",
+      "description": "Existing status marker; not a generic heading pattern.",
+      "html": "<span class=\"ds-badge\">ACADEMIC LAB</span>",
+      "css": ".ds-badge{display:inline-block;color:#90F4EA;background:#123B45;border:1px solid #2A756F;border-radius:9px;padding:4px 9px;font:700 10px system-ui,sans-serif}"
+    },
+    {
+      "name": "Evidence panel",
+      "kind": "card",
+      "description": "Flat navy facts container with a fine border.",
+      "html": "<section class=\"ds-panel\"><strong>Recorded sandbox evidence</strong><p>Historical Windows API calls. No sample is executed.</p></section>",
+      "css": ".ds-panel{background:#10253A;color:#F3F8FA;border:1px solid #284A61;border-radius:16px;padding:20px;font:14px system-ui,sans-serif}.ds-panel p{color:#A9C0CC;margin:12px 0 0}",
+      "refersTo": "panel"
+    },
+    {
+      "name": "Radar instrument",
+      "kind": "custom",
+      "description": "Static panel preview of the native observation instrument.",
+      "html": "<div class=\"ds-radar\"><svg width=\"260\" height=\"260\" viewBox=\"0 0 260 260\" role=\"img\" aria-label=\"Observation radar\"><g fill=\"none\" stroke=\"rgba(57,138,142,.59)\"><circle cx=\"130\" cy=\"130\" r=\"120\"/><circle cx=\"130\" cy=\"130\" r=\"90\"/><circle cx=\"130\" cy=\"130\" r=\"60\"/><circle cx=\"130\" cy=\"130\" r=\"30\"/><path d=\"M10 130h240M130 10v240\"/></g><circle cx=\"130\" cy=\"130\" r=\"5\" fill=\"#22D3C5\"/><g fill=\"#72FFEF\"><circle cx=\"183\" cy=\"68\" r=\"3.5\" opacity=\".9\"/><circle cx=\"56\" cy=\"173\" r=\"3.5\" opacity=\".59\"/><circle cx=\"152\" cy=\"212\" r=\"3.5\" opacity=\".43\"/></g></svg></div>",
+      "css": ".ds-radar{display:inline-flex;background:#10253A radial-gradient(circle,rgba(34,211,197,.094),rgba(34,211,197,.035) 70%,transparent);padding:10px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Behavior Observation Console",
+    "overview": "CYBERVEIL is an Operate-mode native desktop console. The incumbent world is a deep navy working field with teal instrumentation, pale readable text, fine borders, and restrained luminous atmosphere. Its radar, shield/circuit vocabulary, and quiet line icons make observation the focal task. This record extends that established world; it does not establish a new aesthetic.\n\nState and evidence take priority over decoration. English and Arabic share the same screen family, with Qt layout direction handling right-to-left presentation. The adjacent sandbox-report action inherits the existing secondary control treatment and keeps recorded evidence distinct from local observation.",
+    "keyCharacteristics": [
+      "Navy tonal surfaces with one operating teal accent.",
+      "Large state text, compact metrics, and direct action labels.",
+      "Rounded line controls, native desktop navigation, and evidence-first reports.",
+      "English/Arabic parity with explicit busy and disabled states."
+    ],
+    "rules": [
+      {
+        "name": "Task Before Atmosphere",
+        "body": "Keep readiness, the current operation, and its available action readable before the luminous decoration.",
+        "section": "elevation"
+      },
+      {
+        "name": "Evidence Keeps Its Source",
+        "body": "Recorded sandbox findings remain labelled as recorded evidence; their controls never imply a local process can be terminated.",
+        "section": "colors"
+      }
+    ],
+    "dos": [
+      "**Do** keep the radar and plain-language observation state dominant on the dashboard.",
+      "**Do** preserve secondary styling and adjacent no-execution explanation for sandbox-report analysis.",
+      "**Do** preserve busy state when changing language, and keep historical evidence non-actionable for local blocking.",
+      "**Do** pair status colors with readable labels, evidence, and scores.",
+      "**Do** verify native normal-width, narrow-width, keyboard-focus, and Arabic right-to-left states."
+    ],
+    "donts": [
+      "**Don't** promote imported execution evidence into a claim of active infection, live API capture, fileless proof, or reliable protection.",
+      "**Don't** introduce mobile navigation or a new visual direction into this desktop extension.",
+      "**Don't** use success color or an unflagged result as proof that a sample is safe.",
+      "**Don't** turn the existing lab badge, punctuation alert marker, or inherited platform heading face into a mandatory new-screen pattern."
+    ]
+  }
+}

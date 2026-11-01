@@ -21,6 +21,7 @@ class ScanSource(StrEnum):
     REPLAY = "replay"
     FORENSIC = "forensic"
     DEMO_PROCESS = "demo_process"
+    SANDBOX = "sandbox_report"
 
 
 class ScanStatus(StrEnum):
@@ -135,6 +136,7 @@ class RemediationRequest(FrozenModel):
     action: RemediationAction
     confirmed_by: str = "user"
     simulation: bool = False
+    source: ScanSource = ScanSource.LIVE
 
 
 class RemediationResult(FrozenModel):

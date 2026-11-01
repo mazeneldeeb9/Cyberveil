@@ -10,6 +10,7 @@ from cyberveil.domain import (
     RemediationRequest,
     RemediationResult,
     RemediationStatus,
+    ScanSource,
 )
 
 
@@ -83,6 +84,10 @@ class ProcessRemediator:
                 action=request.action,
                 status=RemediationStatus.SUCCEEDED,
                 message="Detection ignored and recorded for this incident.",
+            )
+        if request.source in (ScanSource.SANDBOX, ScanSource.FORENSIC):
+            return self._result(
+                request, RemediationStatus.REFUSED, "Offline evidence cannot authorize local termination.",
             )
         if request.simulation:
             return RemediationResult(

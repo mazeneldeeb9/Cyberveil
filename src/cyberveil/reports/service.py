@@ -8,7 +8,7 @@ import os
 import tempfile
 from pathlib import Path
 
-from cyberveil.domain import IncidentReport, ScanStatus
+from cyberveil.domain import IncidentReport, ScanSource, ScanStatus
 from cyberveil.reports.privacy import redact_report
 from cyberveil.storage import Database
 from cyberveil.ui.i18n import Translator
@@ -294,7 +294,7 @@ class ReportService:
             ("model", scan.model_version),
             ("started", tr.format_datetime(scan.started_at)),
             ("ended", tr.format_datetime(scan.ended_at)),
-            ("samples", str(scan.sample_count)),
+            ("api_calls" if scan.source == ScanSource.SANDBOX else "samples", str(scan.sample_count)),
             ("detections", str(scan.detection_count)),
             ("blocked", str(scan.blocked_count)),
         )
@@ -310,6 +310,8 @@ class ReportService:
         ]
         if redacted:
             pieces.append(f"<p>{tr('redacted_report')}</p>")
+        if scan.source == ScanSource.SANDBOX:
+            pieces.append(f"<p><b>{tr('sandbox_detail')}</b> {tr('sandbox_no_block')}</p>")
         if scan.status != ScanStatus.COMPLETED:
             pieces.append(f"<p><b>{tr('incomplete_report')}</b></p>")
         if scan.error:
@@ -325,10 +327,16 @@ class ReportService:
         )
         pieces.append(f"<h2>{tr('detections')}</h2>")
         if not report.detections:
-            key = "no_threat" if scan.status == ScanStatus.COMPLETED else "no_detections_recorded"
+            key = "sandbox_not_flagged" if scan.source == ScanSource.SANDBOX else "no_threat"
+            if scan.status != ScanStatus.COMPLETED:
+                key = "no_detections_recorded"
             pieces.append(f"<p>{tr(key)}</p>")
         for item in report.detections:
-            pieces.append(f"<h3>{esc(item.process_name)} - PID {item.pid}</h3>")
+            title = (
+                tr("sandbox_detection") if item.source == ScanSource.SANDBOX
+                else f"{item.process_name} - PID {item.pid}"
+            )
+            pieces.append(f"<h3>{esc(title)}</h3>")
             pieces.append(
                 f"<p>{tr('score')}: {item.score:.1%} | {tr('severity')}: "
                 f"{tr.observation(item.severity.value)} | {tr('action')}: "

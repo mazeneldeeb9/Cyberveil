@@ -47,6 +47,7 @@ from cyberveil.domain import (
     Severity,
     utc_now,
 )
+from cyberveil.forensics.sandbox import SandboxAnalysisService
 from cyberveil.forensics.service import ForensicService
 from cyberveil.integrations import OllamaExplainer
 from cyberveil.integrations.ollama import ReportExplanation
@@ -148,6 +149,7 @@ class MainWindow(QMainWindow):
         self._demo_processes: dict[str, tuple[HarmlessDemo, str]] = {}
         self._pending_explanation: tuple[str, str] | None = None
         self._forensics_running = False
+        self._sandbox_running = False
         self._closing = False
 
         self.setWindowTitle("CYBERVEIL")
@@ -192,6 +194,7 @@ class MainWindow(QMainWindow):
         self.dashboard.start_live.connect(lambda: self.start_scan(ScanSource.LIVE))
         self.dashboard.start_demo.connect(lambda: self.start_scan(ScanSource.REPLAY))
         self.dashboard.stop_scan.connect(self.stop_scan)
+        self.dashboard.import_sandbox.connect(self.import_sandbox_report)
         self.history_page.report_requested.connect(self.open_report)
         self.notifications_page.detection_requested.connect(self.open_detection_by_id)
         self.reports_page.report_requested.connect(self.open_report)
@@ -320,6 +323,8 @@ class MainWindow(QMainWindow):
         self.ignore_detection(detection)
 
     def _block_from_dialog(self, dialog: DetectionDialog, detection: DetectionResult) -> None:
+        if detection.source in (ScanSource.SANDBOX, ScanSource.FORENSIC):
+            return
         if detection.source != ScanSource.REPLAY:
             answer = QMessageBox.question(
                 self,
@@ -346,6 +351,7 @@ class MainWindow(QMainWindow):
             process_name=detection.process_name,
             action=RemediationAction.IGNORE,
             simulation=detection.source == ScanSource.REPLAY,
+            source=detection.source,
         )
         result = self.remediator.execute(request)
         self.database.record_remediation(result)
@@ -366,6 +372,8 @@ class MainWindow(QMainWindow):
         *,
         confirmed_by: str = "user",
     ) -> None:
+        if detection.source in (ScanSource.SANDBOX, ScanSource.FORENSIC):
+            return
         if detection.detection_id in self._pending_actions:
             return
         current = self.database.get_detection(detection.detection_id)
@@ -381,6 +389,7 @@ class MainWindow(QMainWindow):
             action=action,
             confirmed_by=confirmed_by,
             simulation=detection.source == ScanSource.REPLAY,
+            source=detection.source,
         )
         job = FunctionJob(self.remediator.execute, request)
         job.signals.succeeded.connect(self._remediation_ready)
@@ -528,6 +537,43 @@ class MainWindow(QMainWindow):
             retranslate = getattr(page, "retranslate", None)
             if callable(retranslate):
                 retranslate()
+
+    def import_sandbox_report(self) -> None:
+        if self._sandbox_running:
+            return
+        filename, _ = QFileDialog.getOpenFileName(
+            self, self.translator("import_sandbox"), "", "CAPE / Cuckoo JSON (*.json)",
+        )
+        if not filename:
+            return
+        self._sandbox_running = True
+        self.dashboard.set_sandbox_busy(True)
+        # Construct the service/model inside the worker so errors restore the UI.
+        job = FunctionJob(lambda: SandboxAnalysisService(self.database).analyze(Path(filename)))
+        job.signals.succeeded.connect(self._sandbox_ready)
+        job.signals.failed.connect(self._sandbox_failed)
+        self.thread_pool.start(job)
+
+    @Slot(object)
+    def _sandbox_ready(self, result: object) -> None:
+        if self._closing:
+            return
+        self._sandbox_running = False
+        self.dashboard.set_sandbox_busy(False)
+        if isinstance(result, dict):
+            self.history_page.refresh()
+            self.reports_page.refresh()
+            self.notifications_page.refresh()
+            self.logs_page.refresh()
+            self.open_report(str(result["session_id"]))
+
+    @Slot(str)
+    def _sandbox_failed(self, message: str) -> None:
+        if self._closing:
+            return
+        self._sandbox_running = False
+        self.dashboard.set_sandbox_busy(False)
+        show_error(self, self.translator("sandbox_failed"), message)
 
     def analyze_memory(self, image_path: str, operating_system: str) -> None:
         if self._forensics_running:

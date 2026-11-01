@@ -81,12 +81,14 @@ class DashboardPage(QWidget):
     start_demo = Signal()
     stop_scan = Signal()
     navigate = Signal(str)
+    import_sandbox = Signal()
 
     def __init__(self, translator: Translator, model_version: str) -> None:
         super().__init__()
         self.translator = translator
         self.model_version = model_version
         self._running = False
+        self._sandbox_busy = False
         page_layout = QVBoxLayout(self)
         page_layout.setContentsMargins(0, 0, 0, 0)
         scroll = QScrollArea()
@@ -169,6 +171,18 @@ class DashboardPage(QWidget):
         hero_layout.addWidget(self.radar, 2, Qt.AlignmentFlag.AlignCenter)
         outer.addWidget(hero, 1)
 
+        sandbox_row = QHBoxLayout()
+        sandbox_row.setSpacing(18)
+        self.sandbox_button = QPushButton()
+        self.sandbox_button.setIcon(icon("reports", COLORS["accent"], 22))
+        self.sandbox_button.clicked.connect(self.import_sandbox)
+        self.sandbox_note = QLabel()
+        self.sandbox_note.setObjectName("muted")
+        self.sandbox_note.setWordWrap(True)
+        sandbox_row.addWidget(self.sandbox_button)
+        sandbox_row.addWidget(self.sandbox_note, 1)
+        outer.addLayout(sandbox_row)
+
         metrics = QFrame()
         metrics.setObjectName("metricStrip")
         metric_layout = QHBoxLayout(metrics)
@@ -225,6 +239,11 @@ class DashboardPage(QWidget):
         self.set_running(False)
         self.status_title.setText(self.translator("complete"))
 
+    def set_sandbox_busy(self, busy: bool) -> None:
+        self._sandbox_busy = busy
+        self.sandbox_button.setEnabled(not busy)
+        self.sandbox_note.setText(self.translator("sandbox_running" if busy else "sandbox_detail"))
+
     def set_metrics(self, sample_count: int, process_count: int, detection_count: int) -> None:
         self.metric_samples.set_value(f"{sample_count:,}")
         self.metric_processes.set_value(f"{process_count:,}")
@@ -248,6 +267,9 @@ class DashboardPage(QWidget):
         )
         self.primary.setText(self.translator("stop_scan") if self._running else self.translator("start_scan"))
         self.demo.setText(self.translator("safe_demo"))
+        self.sandbox_button.setText(self.translator("import_sandbox"))
+        self.sandbox_button.setAccessibleName(self.translator("import_sandbox"))
+        self.sandbox_note.setText(self.translator("sandbox_running" if self._sandbox_busy else "sandbox_detail"))
         self.metric_processes.set_label(self.translator("processes"))
         self.metric_samples.set_label(self.translator("samples"))
         self.metric_detections.set_label(self.translator("detections"))
@@ -936,6 +958,10 @@ class DetectionDialog(QDialog):
             title.setText(translator("demo_process"))
             detail.setText(translator("demo_process_detail"))
             self.setWindowTitle(translator("demo_process"))
+        if detection.source == ScanSource.SANDBOX:
+            title.setText(translator("sandbox_detection"))
+            detail.setText(translator("sandbox_detail"))
+            self.setWindowTitle(translator("sandbox_detection"))
         detail.setObjectName("muted")
         detail.setWordWrap(True)
         copy.addWidget(title)
@@ -985,7 +1011,9 @@ class DetectionDialog(QDialog):
         if detection.source == ScanSource.REPLAY:
             self.block.setText(translator("simulate_block"))
         resolved = detection.disposition == DetectionDisposition.BLOCKED
-        self.block.setEnabled(not resolved)
+        self.block.setEnabled(not resolved and detection.source not in (ScanSource.SANDBOX, ScanSource.FORENSIC))
+        if detection.source == ScanSource.SANDBOX:
+            self.block.setToolTip(translator("sandbox_no_block"))
         self.ignore.setEnabled(not resolved)
         self.ignore.setDefault(True)
         self.block.setObjectName("danger")
