@@ -5,6 +5,6 @@ from importlib.metadata import PackageNotFoundError, version
 try:
     __version__ = version("cyberveil")
 except PackageNotFoundError:  # pragma: no cover - source checkout before installation
-    __version__ = "0.4.0"
+    __version__ = "0.4.1"
 
 __all__ = ["__version__"]

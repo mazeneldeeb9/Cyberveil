@@ -1,4 +1,4 @@
-# CYBERVEIL 0.4.0
+# CYBERVEIL 0.4.1
 
 CYBERVEIL is a safe academic desktop demonstrator for behavior-based detection of fileless-malware-like activity. It combines local process telemetry, deterministic replay scenarios, an explainable scikit-learn classifier, guarded remediation, bilingual reports, optional memory-image analysis, and an optional local Ollama explainer.
 
@@ -7,6 +7,8 @@ The software is not a replacement for production endpoint protection. It never s
 ## Real Windows execution-report detection
 
 Version 0.4.0 adds a separate random-forest classifier trained on real malicious and benign Windows API traces from MalBehavD-V1. On the dashboard choose **Analyze sandbox report** and select an original CAPE/Cuckoo JSON containing inline `behavior.processes[].calls[].api` records and `target.file.sha256`. Results appear in History, Notifications and Reports, with English/Arabic exports. Import never executes the specimen or permits local process blocking.
+
+Version 0.4.1 opens the recorded-behavior alert automatically when an imported report is flagged. The alert stays available in Notifications; an unflagged import opens its report without a popup. Previously saved findings are not reopened by a new import. The classifier and decision threshold are unchanged.
 
 ```bash
 cyberveil analyze-sandbox /path/to/original-report.json --output result.json

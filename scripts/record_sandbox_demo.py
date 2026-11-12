@@ -17,13 +17,14 @@ from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QApplication, QFileDialog, QLineEdit
 from record_demo import Walkthrough
 
+from cyberveil import __version__
 from cyberveil.domain import ScanSource
 from cyberveil.reports import ReportService
 
 
 class SandboxWalkthrough(Walkthrough):
-    CAPTURE_TITLE = "CYBERVEIL 0.4.0 — Real Windows sandbox report analysis"
-    HEADER_LABEL = "CYBERVEIL 0.4.0 / RECORDED WINDOWS EVIDENCE"
+    CAPTURE_TITLE = f"CYBERVEIL {__version__} — Real Windows sandbox report analysis"
+    HEADER_LABEL = f"CYBERVEIL {__version__} / RECORDED WINDOWS EVIDENCE"
     CAPTURE_COMMENT = (
         "Actual Qt UI capture; automated file selection; original published WinMET execution reports. "
         "No new malware execution, safe replay, seeded detection or local process blocking. Includes a miss."
@@ -88,10 +89,10 @@ class SandboxWalkthrough(Walkthrough):
             )
             self.snapshot("06-missed-report")
 
-    def show_alert(self) -> None:
+    def verify_automatic_alert(self) -> None:
         assert self.positive_session
-        detection = self.database.list_detections(session_id=self.positive_session)[0]
-        self.window.show_detection(detection)
+        dialog = self.alert(ScanSource.SANDBOX)
+        assert dialog.detection.session_id == self.positive_session
         self.caption(
             "04 / 08", "الدرجة وحد القرار والأدلة",
             "زر الإيقاف معطّل: التقرير تاريخي ولا يحدد عملية حية على هذا الجهاز.",
@@ -141,7 +142,7 @@ class SandboxWalkthrough(Walkthrough):
         actions = [
             (1, lambda: self.snapshot("01-dashboard")),
             (4, lambda: self.import_report(True)), (7, self.choose),
-            (11, lambda: self.verify_result(True)), (17, self.show_alert), (24, self.close_alert),
+            (11, lambda: self.verify_result(True)), (17, self.verify_automatic_alert), (24, self.close_alert),
             (27, self.switch_arabic), (35, lambda: self.import_report(False)), (38, self.choose),
             (43, lambda: self.verify_result(False)), (51, self.history), (58, self.limits), (66, self.finish),
         ]

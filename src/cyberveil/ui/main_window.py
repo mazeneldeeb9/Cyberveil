@@ -566,6 +566,8 @@ class MainWindow(QMainWindow):
             self.notifications_page.refresh()
             self.logs_page.refresh()
             self.open_report(str(result["session_id"]))
+            for detection in self.database.list_detections(session_id=str(result["session_id"])):
+                self.show_detection(detection)
 
     @Slot(str)
     def _sandbox_failed(self, message: str) -> None:

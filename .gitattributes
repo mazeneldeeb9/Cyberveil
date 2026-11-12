@@ -1,0 +1,2 @@
+# Preserve the published model bytes in native Windows release checkouts.
+src/cyberveil/data/models/*.json text eol=lf
